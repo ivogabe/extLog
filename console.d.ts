@@ -1,5 +1,5 @@
 
-declare class ExtLog {
+declare class extlog {
 	constructor(name : string, color: string);
 	
 	debug(title : string, msg? : string);
@@ -9,7 +9,7 @@ declare class ExtLog {
 	error(title : string, msg? : string);
 	fatal(title : string, msg? : string);
 	
-	getCounter(title : string, time : number) : ExtLog.Counter;
+	getCounter(title : string, time : number) : Counter;
 	
 	setMinLevel(level : any);
 	static setMinLevel(level : any)
@@ -17,10 +17,8 @@ declare class ExtLog {
 	static levels : any;
 }
 
-declare module ExtLog {
-	export interface Counter {
-		add();
-	}
+interface Counter {
+	add();
 }
 
-export = ExtLog;
+declare module "extlog" {}
