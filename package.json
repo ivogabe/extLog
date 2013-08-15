@@ -1,0 +1,20 @@
+{
+  "name": "extLog",
+  "version": "1.0.0",
+  "description": "Easy, clear and colored logging",
+  "main": "console.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ivogabe/extLog.git"
+  },
+  "keywords": [
+    "log",
+    "color",
+    "logging"
+  ],
+  "author": "Ivo Gabe de Wolff",
+  "license": "MIT"
+}
