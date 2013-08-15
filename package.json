@@ -1,6 +1,6 @@
 {
-  "name": "extLog",
-  "version": "1.0.0",
+  "name": "extlog",
+  "version": "1.0.1",
   "description": "Easy, clear and colored logging",
   "main": "console.js",
   "scripts": {
