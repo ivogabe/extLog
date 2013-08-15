@@ -5,6 +5,7 @@ Easy, clear and colored logging with node.js
 ------
 
 Extlog is a module for node.js available via npm. Install it using:
+
 	npm install extlog
 
 How does it work?
@@ -53,7 +54,11 @@ or
 
 Using typescript?
 ------
-There is a definition file: console.d.ts, so you can use this in your TypeScript project.
+There is a definition file included, so you can use this in your TypeScript project.
+
+	import ExtLog = require("ExtLog");
+	
+	var logDB : ExtLog = new ExtLog("database", "green");
 
 More options
 ------
@@ -71,6 +76,8 @@ This way you can also get only logs from one instance:
 
 	ExtLog.setMinLevel("fatal");
 	logDB.setMinLevel("debug");
+
+Remember to call setMinLevel before logging!
 
 The default logging function is console.log, but you can change it:
 
