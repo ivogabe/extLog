@@ -8,7 +8,7 @@ Extlog is a module for node.js available via npm. Install it using:
 	npm install extLog
 
 How does it work?
-------
+-----
 
 First you have to require the library:
 	ExtLog = require("extLog");
