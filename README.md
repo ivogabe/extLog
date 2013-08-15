@@ -5,14 +5,14 @@ Easy, clear and colored logging with node.js
 ------
 
 Extlog is a module for node.js available via npm. Install it using:
-	npm install extLog
+	npm install extlog
 
 How does it work?
 -----
 
 First you have to require the library:
 
-	ExtLog = require("extLog");
+	ExtLog = require("extlog");
 
 Then you can create instances:
 
