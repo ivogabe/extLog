@@ -44,8 +44,11 @@ You can also use counters:
 The counter will log the number of times add() is called in the time (in this example 1 second). It won't log if add() isn't called in the second.
 
 It'll look like this:
+
 ![Screenshot 1](screenshots/screen1.png "Screenshot 1")
+
 or
+
 ![Screenshot 2](screenshots/screen2.png "Screenshot 2")
 
 Using typescript?
