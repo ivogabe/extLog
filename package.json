@@ -2,7 +2,7 @@
   "name": "extlog",
   "version": "1.0.1",
   "description": "Easy, clear and colored logging",
-  "main": "console.js",
+  "main": "extlog.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
