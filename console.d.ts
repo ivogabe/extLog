@@ -1,24 +1,25 @@
-
-declare class extlog {
-	constructor(name : string, color: string);
-	
-	debug(title : string, msg? : string);
-	info(title : string, msg? : string);
-	counter(title : string, msg? : string);
-	warning(title : string, msg? : string);
-	error(title : string, msg? : string);
-	fatal(title : string, msg? : string);
-	
-	getCounter(title : string, time : number) : Counter;
-	
-	setMinLevel(level : any);
-	static setMinLevel(level : any)
-	static color : any;
-	static levels : any;
+declare module "extlog" {
+	class ExtLog {
+		constructor(name : string, color: string);
+		
+		debug(title : string, msg? : any);
+		info(title : string, msg? : any);
+		counter(title : string, msg? : any);
+		warning(title : string, msg? : any);
+		error(title : string, msg? : any);
+		fatal(title : string, msg? : any);
+		
+		getCounter(title : string, time : number) : ExtLog.Counter;
+		
+		setMinLevel(level : any);
+		static setMinLevel(level : any)
+		static color : any;
+		static levels : any;
+	}
+	module ExtLog {
+		interface Counter {
+			add();
+		}
+	}
+	export = ExtLog
 }
-
-interface Counter {
-	add();
-}
-
-declare module "extlog" {}
