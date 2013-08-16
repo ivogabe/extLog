@@ -46,11 +46,11 @@ The counter will log the number of times add() is called in the time (in this ex
 
 It'll look like this:
 
-![Screenshot 1](screenshots/screen1.png "Screenshot 1")
+![Screenshot 1](https://raw.github.com/ivogabe/extLog/master/screenshots/screen1.png "Screenshot 1")
 
 or
 
-![Screenshot 2](screenshots/screen2.png "Screenshot 2")
+![Screenshot 2](https://raw.github.com/ivogabe/extLog/master/screenshots/screen2.png "Screenshot 2")
 
 Using typescript?
 ------
