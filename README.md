@@ -56,6 +56,7 @@ Using typescript?
 ------
 There is a definition file included, so you can use this in your TypeScript project.
 
+	/// <reference path="node_modules/extlog/console.d.ts" />
 	import ExtLog = require("ExtLog");
 	
 	var logDB : ExtLog = new ExtLog("database", "green");
