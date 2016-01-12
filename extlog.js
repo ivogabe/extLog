@@ -1,7 +1,7 @@
 var color = {
 	"reset": "\u001b[0m",
 	"bold": "\u001b[1m",
-	
+
 	"foreground": {
 		"black": "\u001b[30m",
 		"red": "\u001b[31m",
@@ -58,7 +58,9 @@ var levels = {
 		order: 5
 	}
 };
+
 var lastTime = null;
+
 var month = [
 	"Jan.",
 	"Feb.",
@@ -73,17 +75,18 @@ var month = [
 	"Nov.",
 	"Dec."
 ];
+
 function log(logger, level, title, msg) {
 	if (typeof level == "string") {
 		level = levels[level];
 	}
-	
+
 	if (level.order < (logger.minLevel != null ? logger.minLevel : ExtLog.minLevel)) {
-		return false; 
+		return false;
 	}
-	
+
 	var time = new Date();
-	
+
 	consoleLine(logger, level, title, time);
 	if (msg) {
 		if (typeof msg == "string") {
@@ -92,26 +95,33 @@ function log(logger, level, title, msg) {
 			consoleLine(logger, level, msg.toString(), time, true);
 		} else { // JSON
 			var json = JSON.stringify(msg, undefined, 4);
-			json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-				var clr = color.foreground.green; // number
-				if (/^"/.test(match)) {
-					if (/:$/.test(match)) {
-						clr = color.foreground.magenta; // key
-					} else {
-						clr = color.foreground.green; // string
+
+			if (require != null){
+				var util = require("util")
+				json = util.inspect(msg, false, 3, true)
+			}
+			else{
+				json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+					var clr = color.foreground.green; // number
+					if (/^"/.test(match)) {
+						if (/:$/.test(match)) {
+							clr = color.foreground.magenta; // key
+						} else {
+							clr = color.foreground.green; // string
+						}
+					} else if (/true|false/.test(match)) {
+						clr = color.foreground.blue; // boolean
+					} else if (/null/.test(match)) {
+						clr = color.foreground.blue; // null
 					}
-				} else if (/true|false/.test(match)) {
-					clr = color.foreground.blue; // boolean
-				} else if (/null/.test(match)) {
-					clr = color.foreground.blue; // null
-				}
-				return clr+match+color.reset;
-			});
+					return clr+match+color.reset;
+				});
+			}
 			consoleLine(logger, level, json, time, true);
-			
 		}
 	}
 }
+
 function consoleLine(logger, level, str, time, isMsg) {
 	if (str.match(/\r\n|\r|\n/)) {
 		var arr = str.split(/\r\n|\r|\n/g);
@@ -120,7 +130,7 @@ function consoleLine(logger, level, str, time, isMsg) {
 		}
 		return true;
 	}
-	
+
 	var day = time.getDate();
 	if (day < 10) day = "0"+day;
 	var hour = time.getHours();
@@ -129,7 +139,7 @@ function consoleLine(logger, level, str, time, isMsg) {
 	if (minutes < 10) minutes = "0"+minutes;
 	var seconds = time.getSeconds();
 	if (seconds < 10) seconds = "0"+seconds;
-	
+
 	(logger.nativeFunction || ExtLog.nativeFunction || console.log)(
 				color.reset + month[time.getMonth()] + day+" "+time.getFullYear()+" "+hour+":"+minutes+":"+seconds+" "
 				+ color.reset + color.background[logger.color] + color.foreground.white + " "
@@ -140,6 +150,10 @@ function consoleLine(logger, level, str, time, isMsg) {
 				+ color.reset + " " + str);
 }
 
+
+
+
+// EXTLOG
 var ExtLog = function(name, color) {
 	this.name = name;
 	this.color = color;
@@ -148,26 +162,35 @@ var ExtLog = function(name, color) {
 	this.nameLog = (new Array(9 - this.nameLog.length)).join(" ") + this.nameLog;
 	this.minLevel = null;
 }
-ExtLog.minLevel = null;
+
+ExtLog.minLevel = 0;
+ExtLog.color = color;
+ExtLog.levels = levels;
 
 ExtLog.prototype.debug = function(title, msg) {
 	log(this, "debug", title, msg);
 }
+
 ExtLog.prototype.info = function(title, msg) {
 	log(this, "info", title, msg);
 }
+
 ExtLog.prototype.warning = function(title, msg) {
 	log(this, "warning", title, msg);
 }
+
 ExtLog.prototype.error = function(title, msg) {
 	log(this, "error", title, msg);
 }
+
 ExtLog.prototype.fatal = function(title, msg) {
 	log(this, "fatal", title, msg);
 }
+
 ExtLog.prototype.counter = function(title, msg) {
 	log(this, "counter", title, msg);
 }
+
 ExtLog.prototype.setMinLevel = function(level) {
 	if (level == null) {
 		this.minLevel = null;
@@ -182,11 +205,12 @@ ExtLog.prototype.setMinLevel = function(level) {
 			this.minLevel = level;
 	}
 }
+
 ExtLog.prototype.getCounter = function(title, time) {
 	return new Counter(this, title, time);
 }
 
-ExtLog.minLevel = 0;
+// STATIC
 ExtLog.setMinLevel = function(level) {
 	if (level == null) {
 		ExtLog.minLevel = 0;
@@ -202,21 +226,26 @@ ExtLog.setMinLevel = function(level) {
 	}
 }
 
+
+
+
+// COUNTER
 var Counter = function(logger, title, time) {
 	this.logger = logger;
 	this.title = title;
 	this.count = 0;
 	this.time = time;
-	
+
 	this.interval = null;
-	
+
 	this.startTime = new Date().getTime();
 }
+
 Counter.prototype.setInterval = function() {
 	if (this.interval) clearTimeout(this.interval);
-	
+
 	var intervalTime = this.time - (new Date().getTime() - this.startTime) % this.time;
-	
+
 	var _this = this;
 	this.interval = setTimeout(function() {
 		if (_this.count != 0) {
@@ -226,14 +255,13 @@ Counter.prototype.setInterval = function() {
 		_this.interval = null;
 	}, intervalTime);
 }
+
 Counter.prototype.add = function() {
 	this.count++;
-	
+
 	if (!this.interval) {
 		this.setInterval();
 	}
 }
 
-ExtLog.color = color;
-ExtLog.levels = levels;
 module.exports = ExtLog;
