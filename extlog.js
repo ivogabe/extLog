@@ -76,7 +76,7 @@ var month = [
 	"Dec."
 ];
 
-function log(logger, level) {
+function log(logger, level, message_args) {
 	if (typeof level == "string") {
 		level = levels[level];
 	}
@@ -87,7 +87,6 @@ function log(logger, level) {
 
 	var time = new Date();
 
-	var message_args = Array.prototype.slice.call(arguments, log.length);
 	message_args.forEach(function(msg, idx){
 		if (typeof msg == "string") {
 			if(idx == 0){
@@ -180,28 +179,34 @@ ExtLog.minLevel = 0;
 ExtLog.color = color;
 ExtLog.levels = levels;
 
-ExtLog.prototype.debug = function(title, msg) {
-	log(this, "debug", title, msg);
+ExtLog.prototype.debug = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "debug", message_args);
 }
 
-ExtLog.prototype.info = function(title, msg) {
-	log(this, "info", title, msg);
+ExtLog.prototype.info = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "info", message_args);
 }
 
-ExtLog.prototype.warning = function(title, msg) {
-	log(this, "warning", title, msg);
+ExtLog.prototype.warning = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "warning", message_args);
 }
 
-ExtLog.prototype.error = function(title, msg) {
-	log(this, "error", title, msg);
+ExtLog.prototype.error = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "error", message_args);
 }
 
-ExtLog.prototype.fatal = function(title, msg) {
-	log(this, "fatal", title, msg);
+ExtLog.prototype.fatal = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "fatal", message_args);
 }
 
-ExtLog.prototype.counter = function(title, msg) {
-	log(this, "counter", title, msg);
+ExtLog.prototype.counter = function() {
+	var message_args = Array.prototype.slice.call(arguments, 0);
+	log(this, "counter", message_args);
 }
 
 ExtLog.prototype.setMinLevel = function(level) {

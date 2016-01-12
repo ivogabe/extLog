@@ -15,5 +15,9 @@ describe('should be able to log', function(){
 	it('should log object',function(){
 		log.info("Test", {Test: "Test"})
 	})
+
+	it('should log multiple things',function(){
+		log.info("Test", {Test: "Test"}, "Multiple")
+	})
 })
 
