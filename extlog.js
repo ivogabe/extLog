@@ -76,7 +76,7 @@ var month = [
 	"Dec."
 ];
 
-function log(logger, level, title, msg) {
+function log(logger, level) {
 	if (typeof level == "string") {
 		level = levels[level];
 	}
@@ -87,20 +87,26 @@ function log(logger, level, title, msg) {
 
 	var time = new Date();
 
-	consoleLine(logger, level, title, time);
-	if (msg) {
+	var message_args = Array.prototype.slice.call(arguments, log.length);
+	message_args.forEach(function(msg, idx){
 		if (typeof msg == "string") {
-			consoleLine(logger, level, msg, time, true);
-		} else if (typeof msg == "function") {
-			consoleLine(logger, level, msg.toString(), time, true);
-		} else { // JSON
-			var json = JSON.stringify(msg, undefined, 4);
-
-			if (require != null){
-				var util = require("util")
-				json = util.inspect(msg, false, 3, true)
+			if(idx == 0){
+				consoleLine(logger, level, msg, time, false);
 			}
 			else{
+				consoleLine(logger, level, msg, time, true);
+			}
+
+		}
+		else if (typeof msg == "function") {
+			consoleLine(logger, level, msg.toString(), time, true);
+		}
+		else {
+
+			// JSON
+			var json = ""
+			try{
+				json = JSON.stringify(msg, undefined, 4);
 				json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
 					var clr = color.foreground.green; // number
 					if (/^"/.test(match)) {
@@ -117,9 +123,19 @@ function log(logger, level, title, msg) {
 					return clr+match+color.reset;
 				});
 			}
+			catch(e){
+				if (require != null){
+					var util = require("util")
+					json = util.inspect(msg, false, null, true)
+				}
+				else{
+					consoleLine(logger, level, util.inspect(e), time, true);
+					return;
+				}
+			}
 			consoleLine(logger, level, json, time, true);
 		}
-	}
+	})
 }
 
 function consoleLine(logger, level, str, time, isMsg) {
@@ -131,23 +147,20 @@ function consoleLine(logger, level, str, time, isMsg) {
 		return true;
 	}
 
-	var day = time.getDate();
-	if (day < 10) day = "0"+day;
-	var hour = time.getHours();
-	if (hour < 10) hour = "0"+hour;
-	var minutes = time.getMinutes();
-	if (minutes < 10) minutes = "0"+minutes;
-	var seconds = time.getSeconds();
-	if (seconds < 10) seconds = "0"+seconds;
+	var day = ("0" + time.getDate()).substr(-2);
+	var hour = ("0" + time.getHours()).substr(-2);
+	var minutes = ("0" + time.getMinutes()).substr(-2);
+	var seconds = ("0" + time.getSeconds()).substr(-2);
 
 	(logger.nativeFunction || ExtLog.nativeFunction || console.log)(
-				color.reset + month[time.getMonth()] + day+" "+time.getFullYear()+" "+hour+":"+minutes+":"+seconds+" "
-				+ color.reset + color.background[logger.color] + color.foreground.white + " "
-				+ color.reset + color.background.black + color.foreground.white// + color.bold
-				+ logger.nameLog
-				+ color.reset + " "
-				+ color.background.black + level.color + /*color.bold + */ (isMsg ? '····' : level.short)
-				+ color.reset + " " + str);
+		color.reset + month[time.getMonth()] + day + " " + time.getFullYear() + " " + hour + ":" + minutes + ":" + seconds + " "
+		+ color.reset + color.background[logger.color] + color.foreground.white + " "
+		+ color.reset + color.background.black + color.foreground.white
+		+ logger.nameLog
+		+ color.reset + " "
+		+ color.background.black + level.color + (isMsg ? '····' : level.short)
+		+ color.reset + " " + str
+		);
 }
 
 
